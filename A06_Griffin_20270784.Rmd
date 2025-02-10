@@ -1,0 +1,63 @@
+---
+title: "Assignment6"
+author: "Clarisa Griffin"
+date: "2025-02-10"
+output: html_document
+---
+Load libraries
+```{r}
+library(doParallel)
+library(parallel)
+library(foreach)
+```
+
+Run detectCores() function
+```{r}
+detectCores()
+```
+This computer has 8 cores
+
+Write a for loop and track how long it takes to run
+```{r, echo=T, results="hide"}
+set.seed(123)
+start<-Sys.time()
+for(i in 1:4000){
+  mean(rnorm(100000,10,3))
+}
+Sys.time()-start
+```
+This loop took 20.40734  seconds
+
+Predict how much faster a multi threaded program will run
+
+Using 8 cores, the process should take an eighth of the time (about 2.5 seconds)
+But, later in this document I use 7 instead of 8 cores, so in that case the process should take one 7th of the original time (about 3 seconds)
+```{r}
+seconds<-20.40734
+core<-7
+seconds/core
+# 2.91 seconds/core, and if each core runs in parallel, 2.915334 seconds in total
+```
+Modify the loop to run in parallel, then time the new parallel loop
+```{r, echo=T, results="hide"}
+#use 7 cores so one is available for other processing activities
+cores<-parallel::makeCluster(detectCores()-1)
+
+#activate multi threading
+doParallel::registerDoParallel(cores)
+
+#use foreach() to rerun the loop, and time it
+set.seed(123)
+start<-Sys.time()
+foreach(i=1:4000) %dopar%
+  mean(rnorm(100000,10,3))
+Sys.time()-start 
+
+#De-activate multi threading
+parallel::stopCluster(cores)
+```
+This loop took 7.362339  seconds
+
+Compare the runtime for the serial vs parallel loop
+
+The serial loop took 22.94523 seconds, and the parallel loop took 7.362339 seconds. The theoretical run time (3.277 seconds) is shorter than the actual run time of the parallel program because the computer has to take all the data and copy it 7 times onto each core- this is what takes so long. The actual calculation probably doesn't take much longer than what I calculated. The time it takes also depends on how far apart the cores on my computer are- the further apart, the longer the computation will take.
