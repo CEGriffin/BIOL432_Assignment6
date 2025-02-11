@@ -60,4 +60,6 @@ This loop took 7.362339  seconds
 
 Compare the runtime for the serial vs parallel loop
 
-The serial loop took 22.94523 seconds, and the parallel loop took 7.362339 seconds. The theoretical run time (3.277 seconds) is shorter than the actual run time of the parallel program because the computer has to take all the data and copy it 7 times onto each core- this is what takes so long. The actual calculation probably doesn't take much longer than what I calculated. The time it takes also depends on how far apart the cores on my computer are- the further apart, the longer the computation will take.
+The serial loop took 22.94523 seconds, and the parallel loop took 7.362339 seconds.
+
+The theoretical run time (3.277 seconds) is shorter than the actual run time of the parallel program because the computer has to take all the data and copy it 7 times onto each core- this is what takes so long. The actual calculation probably doesn't take much longer than what I calculated. The time it takes also depends on how far apart the cores on my computer are- the further apart, the longer the computation will take. Additionally, the computer may be running programs in the background, which takes up computing power. Finally, this laptop is old, and so the cores are old, which decreases efficiency.
